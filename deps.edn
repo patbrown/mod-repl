@@ -1,0 +1,43 @@
+{:aliases
+   {:build/main {:build-with {:aliases [:foss/mod-repl],
+                              :class-dir "target/classes",
+                              :clojars? true,
+                              :project "deps.edn",
+                              :repo "mod-repl",
+                              :scm-url "github.com",
+                              :src-dirs ["src"],
+                              :username "patbrown",
+                              :version "0.2.0"},
+                 :deps {babashka/process {:mvn/version "0.5.22"},
+                        io.github.clojure/tools.build {:mvn/version "0.10.6"}},
+                 :extra-paths ["build"],
+                 :ns-default build},
+    :deploy/main {:exec-args {:artifact "target/deploy.jar",
+                              :installer :remote,
+                              :pom-file "target/pom.xml",
+                              :sign-releases? false},
+                  :exec-fn deps-deploy.deps-deploy/deploy,
+                  :extra-deps {slipset/deps-deploy {:mvn/version "0.2.2"}}},
+    :foss/mod-repl
+      {:build-with
+         {:aliases [:foss/mod-repl], :repo "mod-repl", :version "0.2.0"},
+       :extra-paths ["src"],
+       :nss [{:destination "bin/foss/mod-repl/src",
+              :files ["baby/pat/mod_repl.cljc" "baby/pat/mod_repl/utils.cljc"],
+              :source "bin/code/src"}]},
+    :run/repl
+      {:extra-deps {cider/cider-nrepl {:mvn/version "0.50.2"},
+                    nrepl/nrepl {:mvn/version "1.1.0"},
+                    refactor-nrepl/refactor-nrepl {:mvn/version "3.6.0"}},
+       :main-opts
+         ["-m" "nrepl.cmdline" "-b" "0.0.0.0" "-p" "8675" "--middleware"
+          "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]}},
+ :build-with {:aliases [:foss/mod-repl],
+              :class-dir "target/classes",
+              :clojars? true,
+              :project "deps.edn",
+              :repo "mod-repl",
+              :scm-url "github.com",
+              :src-dirs ["src"],
+              :username "patbrown",
+              :version "0.2.0"}}
